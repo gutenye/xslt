@@ -9,4 +9,4 @@ Usage
 
 **Ruby**
 
-	$ ../xlst html2bbcode.xslt example.html
+	$ ../xlst bbcode.xslt example.html
