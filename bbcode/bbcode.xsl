@@ -3,8 +3,16 @@
 	<xsl:output method="text" indent="no"/>
 	<xsl:strip-space elements="*"/>
 
+	<!-- Configuration -->
+	<xsl:param name="list-style" select="'default'"/>
+
 	<xsl:template match="/">
     <xsl:apply-templates/>
+	</xsl:template>
+
+	<!-- ¤head -->
+	<xsl:template match="h1 | h2 | h3 | h4 | h5 | h6">
+		<xsl:text>&#x0a;</xsl:text>[b]<xsl:apply-templates/>[/b]<xsl:text>&#x0a;&#x0a;</xsl:text>
 	</xsl:template>
 
 	<xsl:template match="div | br">
@@ -51,20 +59,56 @@
     <xsl:text/>[img]<xsl:value-of select="@src"/><xsl:apply-templates/>[/img]<xsl:text/>
 	</xsl:template>
 
+	<!-- ¤list -->
+
   <xsl:template match="ul">
-    <xsl:apply-templates mode="unordered"/>
+		<xsl:choose>
+			<xsl:when test="$list-style = 'official'">
+				<xsl:text/>[ul]<xsl:apply-templates/>[/ul]<xsl:text>&#x0a;</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates/>
+			</xsl:otherwise>
+		</xsl:choose>
+  </xsl:template>
+
+	<xsl:template match="ul/li">
+		<xsl:choose>
+			<xsl:when test="$list-style = 'official'">
+				<xsl:text/>[li]<xsl:apply-templates/>[/li]<xsl:text>&#x0a;</xsl:text>
+			</xsl:when>
+			<xsl:when test="$list-style = 'simple'">
+				<xsl:text/>[*]<xsl:apply-templates/><xsl:text>&#x0a;</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text/>* <xsl:apply-templates/><xsl:text>&#x0a;</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
   </xsl:template>
 
   <xsl:template match="ol">
-    <xsl:apply-templates mode="ordered"/>
+		<xsl:choose>
+			<xsl:when test="$list-style = 'official'">
+				<xsl:text/>[ol]<xsl:apply-templates/>[/ol]<xsl:text>&#x0a;</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates/>
+			</xsl:otherwise>
+		</xsl:choose>
   </xsl:template>
 
-  <xsl:template match="li" mode="unordered">
-    <xsl:text/>[*]<xsl:apply-templates/><xsl:text>&#x0a;</xsl:text>
-  </xsl:template>
-
-  <xsl:template match="li" mode="ordered">
-    <xsl:text/>[#]<xsl:apply-templates/><xsl:text>&#x0a;</xsl:text>
+	<xsl:template match="ol/li">
+		<xsl:choose>
+			<xsl:when test="$list-style = 'official'">
+				<xsl:text/>[li]<xsl:apply-templates/>[/li]<xsl:text>&#x0a;</xsl:text>
+			</xsl:when>
+			<xsl:when test="$list-style = 'simple'">
+				<xsl:text/>[#]<xsl:apply-templates/><xsl:text>&#x0a;</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text/><xsl:value-of select="position()"/>. <xsl:apply-templates/><xsl:text>&#x0a;</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
   </xsl:template>
 
 	<xsl:template match="table">

@@ -9,4 +9,10 @@ Usage
 
 **Ruby**
 
-	$ ../xlst bbcode.xslt example.html
+	$ ../xlst bbcode.xslt example.html -p list-style:simple
+
+Parameter
+--------
+
+list-style: default, official, simple
+
